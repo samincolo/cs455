@@ -27,5 +27,36 @@ for each of these correlated words as well as some measure of how correlated
 they are.
 
 """
-def get_correlation(rdd, keyword, city):
-    pass
+
+from pyspark.ml.feature import CountVectorizer, IDF
+
+def map_to_words(job_row):
+    result = {}
+    words = job_row.words
+    freqs = job_row.features.toArray().tolist()
+    for i in range(len(words)):
+        word = words[i]
+        if word in result:
+            result[word] += freqs[i] ** 2
+        elif freqs[i] > 0.0:
+            result[word] = freqs[i] ** 2
+    return result
+
+def merge_dicts(dict1, dict2):
+    result = {**dict1, **dict2}
+    for k, v in result.items():
+        if k in dict1 and k in dict2:
+            result[k] = v + dict1[k]
+    return result
+                
+
+def get_correlation(frame, keyword, city):
+    featurized = CountVectorizer(inputCol = "words", outputCol = "rawFeatures").fit(frame)
+    freq_vectors = featurized.transform(frame)
+
+    scaled = IDF(inputCol = "rawFeatures", outputCol = "features").fit(freq_vectors).transform(freq_vectors)
+
+    job_vectors = scaled.select("words", "features").rdd
+    worded_vectors = job_vectors.map(map_to_words)
+    reduced_dict = worded_vectors.reduce(merge_dicts)
+    print(reduced_dict)
