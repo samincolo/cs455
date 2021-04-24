@@ -6,7 +6,7 @@ correlator.
 """
 
 import correlator
-import sa_formatter
+from sa_formatter import SAFormatter
 import pyspark
 from pyspark.sql import SparkSession
 
@@ -15,9 +15,16 @@ def launch(parameters):
     data_frames = []
 
     data = combine_data(list(map(lambda fn: get_json_data_frame(fn, spark), parameters["data_files"])))
-    #data.persist() don't uncomment this unless you want OutOutMemoryExceptions
+    cities = set(get_txt_rdd(parameters["city_file"], spark).collect())
+    keywords = set(get_txt_rdd(parameters["keyword_file"], spark).collect())
 
-    launch_single(data, "Fort Collins, CO", "java")
+    data_sets = {
+        "data": data,
+        "cities": cities,
+        "keywords": keywords
+    }
+
+    launch_single(data_sets, "Fort Collins, CO", "java")
 
     """
     cities = get_txt_rdd(parameters["city_file"], spark).collect()
@@ -61,12 +68,19 @@ def combine_data(sources):
 
     return combined
 
-def launch_single(data, city, keyword):
+def launch_single(data_sets, city, keyword):
+    data = data_sets["data"]
+    keywords = data_sets["keywords"]
+
     city_split = city.split(",")
     city_name = city_split[0].strip()
     state_code = city_split[1].strip()
 
-    city_frame = data.filter((data.city == city_name) & (data.state == state_code))
+    formatter = SAFormatter()
+    formatter.set_possible_keywords(keywords)
 
-    final_frame = sa_formatter.frame_to_words_frame(city_frame)
+    city_frame = data.filter((data.city == city_name) & (data.state == state_code))
+    final_frame = formatter.frame_to_words_frame(city_frame)
+    final_frame = final_frame.select("words", "jobkey")
     result = correlator.get_correlation(final_frame, keyword, city)
+
