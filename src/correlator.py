@@ -37,16 +37,16 @@ def map_to_words(job_row):
     for i in range(len(words)):
         word = words[i]
         if word in result:
-            result[word] += freqs[i] ** 2
+            result[word] += freqs[i]
         elif freqs[i] > 0.0:
-            result[word] = freqs[i] ** 2
+            result[word] = freqs[i]
     return result
 
 def merge_dicts(dict1, dict2):
     result = {**dict1, **dict2}
     for k, v in result.items():
         if k in dict1 and k in dict2:
-            result[k] = v + dict1[k]
+            result[k] = v if v > dict1[k] else dict1[k]
     return result
                 
 
