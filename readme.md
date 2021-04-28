@@ -72,5 +72,3 @@ following names:
 - job dataset: `indeed_data_1.json`
 - city file: `top_citities.txt` (yes, unfortunate typo)
 - keyword file: `languages.txt`
-
-
