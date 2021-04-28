@@ -1,0 +1,56 @@
+iNew York City, NY
+Los Angeles, CA
+Chicago, IL
+Houston, TX
+Phoenix, AZ
+Philadelphia, PA
+San Antonio, TX
+San Diego, CA
+Dallas, TX
+San Jose, CA
+Austin, TX
+Jacksonville, FL
+Fort Worth, TX
+Columbus, OH
+Charlotte, NC
+San Francisco, CA
+Indianaplis, IN
+Seattle, WA
+Denver, CO
+Birmingham, AL
+Anchorage, AK
+Little Rock, AR
+Bridgeport, CT
+Wilmington, DE
+Washington, DC
+Atlanta, GA
+Honolulu, HI
+Boise, ID
+Des Moines, IA
+Wichita, KS
+Louisville, KY
+New Orleans, LA
+Portland, ME
+Baltimore, MD
+Boston, MA
+Minneapolis, MN
+Jackson, MS
+Detroit, MI
+Kansas City, MO
+Billings, MT
+Omaha, NE
+Las Vegas, NV
+Manchester, NH
+Newark, NJ
+Albuquerque, NM
+Fargo, ND
+Oklahoma City, OK
+Portland, OR
+Providence, RI
+Charleston, SC
+Nashville, TN
+Salt Lake City, UT
+Virginia Beach, VA
+Charleston, WV
+Milwaukee, WI
+Cheyenne, WY

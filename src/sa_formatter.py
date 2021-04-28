@@ -13,7 +13,7 @@ from pyspark.sql.types import ArrayType, StringType
 def remove_punctuation(text):
     # would use the built-in string.punctuation, but that removes +'s and #'s
     # which interfere with C++ and C#
-    punctuation = "\"'.,-!?*^&%#@;:()/"
+    punctuation = "[]\"',-!?*^&%@;:()/"
     return text.translate(str.maketrans(punctuation, " " * len(punctuation)))
 
 def remove_html_tags(text):
