@@ -21,8 +21,11 @@ More details in the Spark Analytics section.
 # Dataset Creation
 data.json, 1.17gb, ~200k jobs
 
-## Grab jobs off Indeed
+## Source code
+- Scripts and Jupyter notebooks used to perform the following tasks can be
+  found in `/scraping.`
 
+## Grab jobs off Indeed
 - Indeed provides a public api to query for jobs
 - A query was constructed with variables for the query type and city
 - Using the JN `Scraping? Indeed! we loop over every programming language and city and query the api
@@ -41,6 +44,7 @@ data.json, 1.17gb, ~200k jobs
 - To complete the dataset the job descriptions would need to be added to the json grabbed from the api
 - This simple proccess was completed in the JP Add desc to jobs
 - The resulting dataset was 1.17 gb of ~200k CS jobs from around the world
+
 
 # Spark Analytics
 
@@ -72,3 +76,12 @@ following names:
 - job dataset: `indeed_data_1.json`
 - city file: `top_citities.txt` (yes, unfortunate typo)
 - keyword file: `languages.txt`
+
+When the job is finished, you will find the output .csv files, one for each
+city in the city file, within `/home/sa/out_b_csv`.
+
+# Web Frontend
+
+## Source code
+
+All source code for the website frontend can be found in `/local_html`.
