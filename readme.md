@@ -1,6 +1,11 @@
 # Dataset Creation
 data.json, 1.17gb, ~200k jobs
 
+## Usage
+- navigate to root project directory
+- `hadoop fs -put /data /home/sa`
+- `./run_on_cluster.sh`
+
 
 ## Grab jobs off Indeed
 
