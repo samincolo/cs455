@@ -1,17 +1,31 @@
-# Dataset Creation
-data.json, 1.17gb, ~200k jobs
+# Skill Advisor
+
+The source code and all helper scripts and notebooks for the Skill Advisor
+project.  Includes independent data retrieval code, Spark analysis code, and
+web frontend code.
+
+## Written by
+
+* Shaunak Amin
+* JeanMarc Ruffalo-Burgat
+* Pierce Smith
 
 ## Usage
+- mount data files using `hadoop fs -put`
 - navigate to root project directory
-- `hadoop fs -put /data /home/sa`
-- `./run_on_cluster.sh`
+- edit `run_on_cluster.sh` to reflect the mounted data files
+- execute `./run_on_cluster.sh`
 
+More details in the Spark Analytics section.
+
+# Dataset Creation
+data.json, 1.17gb, ~200k jobs
 
 ## Grab jobs off Indeed
 
 - Indeed provides a public api to query for jobs
 - A query was constructed with variables for the query type and city
-- Using the JN Scraping? Indeed! we loop over every programming language and city and query the api
+- Using the JN `Scraping? Indeed! we loop over every programming language and city and query the api
 - The jobs were de-duped using the jobkey value see Unique Job Keys JP
 - The api only returns a snippet of the description so we would need to query the indeed site directly to grab this data
 
@@ -27,3 +41,34 @@ data.json, 1.17gb, ~200k jobs
 - To complete the dataset the job descriptions would need to be added to the json grabbed from the api
 - This simple proccess was completed in the JP Add desc to jobs
 - The resulting dataset was 1.17 gb of ~200k CS jobs from around the world
+
+# Spark Analytics
+
+## Source code
+
+The source code for all Spark analytics is found within the `src` folder.
+Analysis was done using PySpark and the PySpark SQL / PySpark MLLib libraries.
+
+- `run.py`: This is the main script that is submitted to the cluster by the
+   `run_on_cluster.sh` script.
+- `launch_job.py`: This module loads data in from HDFS, processes and persists
+   this data (including tokenizing job descriptions), then runs a correlation
+   task for every city in the dataset.
+- `sa_formatter.py`: This module is used to format and tokenize the job
+   descriptions. Punctuation is removed, words are set to lowercase, text is
+   split on spaces, and then everything is trimmed to a subset of keywords.
+- `correlator.py`: This module performs FP-Growth on formatted job descriptions,
+   outputting a dataframe full of correlations that is later saved as a .csv by
+   the `launch_job.py` script.
+
+## Usage
+
+To run this on your own cluster, first mount the data, including the Indeed
+jobs dataset, list of cities, and list of langauges, to HDFS.
+`run_on_cluster.sh` should then be edited to reflect where you mounted each
+file. By default, all data should be mounted under `/home/sa`, with the
+following names:
+
+- job dataset: `indeed_data_1.json`
+- city file: `top_citities.txt` (yes, unfortunate typo)
+- keyword file: `languages.txt`
