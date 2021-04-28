@@ -2,61 +2,72 @@
 Does The Analysis :tm:
 """
 
+import operator
+import functools
+from pyspark.ml.fpm import FPGrowth
+from pyspark.sql.types import StructType, StructField, StringType
+
+# Model parameters
+MIN_SUPPORT = 0.01
+MIN_CONFIDENCE = 0.01
+
+def row_to_correlation_pair(row):
+    base = functools.reduce(lambda a, b: a + '&' + b, sorted(row.antecedent))
+    against = row.consequent[0]
+    score = row.confidence
+    return (base, [(against, score)])
+
+def rdd_to_frame(rdd, keywords, spark):
+    stype = list(map(lambda kw: StructField(kw, StringType(), True), keywords))
+    stype.insert(0, StructField('keyword', StringType(), True))
+    schema = StructType(stype)
+
+    return spark.createDataFrame(rdd, schema = schema)
+
+def merge_sorted(list1, list2):
+    return sorted(list1 + list2, key = lambda pair: pair[0])
+
+# Not all keywords in the keyword set exist for the set of jobs that contained
+# another keyword.
+# This function pads a row of correlations with a 0.0 for every keyword that 
+# did not appear with it.
+def fill_missing_row(row, keywords):
+    corrs = row[1][:]
+    i = 0
+    while i < len(keywords):
+        if i >= len(corrs) or corrs[i][0] != keywords[i]: 
+            corrs.insert(i, (keywords[i], 0.0))
+        i += 1
+    return (row[0], corrs)
+            
+
+def fill_missing(keywords):
+    return lambda row: fill_missing_row(row, keywords)
+
+def flatten_tuple(row):
+    return (row[0], *list(map(lambda pair: pair[1], row[1])))
+
 """
 Takes in:
-    rdd: an RDD of pyspark.sql.Row containing information about a subset of the
-    jobs in a particular city
-    keyword: The keyword this RDD was filtered on. Rows in the RDD will only
-    contain jobs with this keyword.
+    frame: a dataframe containing information about a subset of the jobs in a
+    particular city.
+    keywords: the set of keywords to create correlations for.
     city: The city, in form "name, state code" that this RDD was filtered on.
     Rows in the RDD will only contain jobs in this city.
-
-Should output an RDD of pyspark.sql.Row for each word in the jobs that you find
-to be interestingly correlated with the given keyword.
-
-CITY: The city as passed into this functon
-KEYWORD: The original keyword as passed into this function
-CORRELATED_WORD: A word that was found to be correlated to the keyword in these jobs
-CORRELATION_AMOUNT: Some measure of how highly correlated the KEYWORD and the CORRELATED_WORD are
-
-For instance, on a particular invocation of this function, you may get 
-keyword = "java" and city = "Albany, TX". This means every job in the RDD is in
-Albany and mentioned java. Then, you can analyze each of the descriptions for
-these jobs to find correlated words to "java", then output a Row in a new RDD
-for each of these correlated words as well as some measure of how correlated
-they are.
-
+    spark: the spark session
+Returns a dataframe full of correlations.
 """
+def get_correlation(frame, keywords, city, spark):
+    keywords = sorted(list(keywords))
+    model = FPGrowth(itemsCol = "words", minSupport = MIN_SUPPORT, minConfidence = MIN_CONFIDENCE).fit(frame)
 
-from pyspark.ml.feature import CountVectorizer, IDF
+    kwrules = model.associationRules.rdd
 
-def map_to_words(job_row):
-    result = {}
-    words = job_row.words
-    freqs = job_row.features.toArray().tolist()
-    for i in range(len(words)):
-        word = words[i]
-        if word in result:
-            result[word] += freqs[i]
-        elif freqs[i] > 0.0:
-            result[word] = freqs[i]
-    return result
+    # literally MapReduce
+    correlations = kwrules.map(row_to_correlation_pair)
+    correlations = correlations.reduceByKey(merge_sorted)
+    correlations = correlations.map(fill_missing(keywords))
+    correlations = correlations.map(flatten_tuple)
 
-def merge_dicts(dict1, dict2):
-    result = {**dict1, **dict2}
-    for k, v in result.items():
-        if k in dict1 and k in dict2:
-            result[k] = v if v > dict1[k] else dict1[k]
-    return result
-                
+    return rdd_to_frame(correlations, keywords, spark)
 
-def get_correlation(frame, keyword, city):
-    featurized = CountVectorizer(inputCol = "words", outputCol = "rawFeatures").fit(frame)
-    freq_vectors = featurized.transform(frame)
-
-    scaled = IDF(inputCol = "rawFeatures", outputCol = "features").fit(freq_vectors).transform(freq_vectors)
-
-    job_vectors = scaled.select("words", "features").rdd
-    worded_vectors = job_vectors.map(map_to_words)
-    reduced_dict = worded_vectors.reduce(merge_dicts)
-    print(reduced_dict)
