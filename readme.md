@@ -1,5 +1,7 @@
 # Skill Advisor
 
+Site now live at https://skilladvisor.net
+
 The source code and all helper scripts and notebooks for the Skill Advisor
 project.  Includes independent data retrieval code, Spark analysis code, and
 web frontend code.
