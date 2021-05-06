@@ -1,5 +1,5 @@
 <?php
-require('../../config.php');
+require('../config.php');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -137,28 +137,31 @@ function permute($arr, $temp_string, &$permutedIds) {
 
 function idsAndNames(&$keyIds, &$keyNames){
 
-	$keywordNameToIds = json_decode('{"expressjs":"4398046511104","tensorflow":"2199023255552","kotlin":"1099511627776","bash":"549755813888","docker":"274877906944","spark":"137438953472","hadoop":"68719476736","azure":"34359738368","aws":"17179869184","perl":"8589934592","laravel":"4294967296","vba":"2147483648","linux":"1073741824","django":"536870912","swift":"268435456","ruby":"134217728","asp.net":"67108864","node.js":"33554432","r":"16777216","ios":"8388608","mysql":"4194304","css":"2097152","jquery":"1048576","html":"524288","android":"262144","lisp":"131072","mongo":"65536","nosql":"32768","clojure":"16384","haskell":"8192","scala":"4096","rust":"2048","c#":"1024","c++":"512","c":"256","golang":"128","python":"64","php":"32","java":"16","vue":"8","reactjs":"4","angular":"2","javascript":"1"}', true);
+    $keywordNameToIds = json_decode('{"expressjs":"4398046511104","tensorflow":"2199023255552","kotlin":"1099511627776","bash":"549755813888","docker":"274877906944","spark":"137438953472","hadoop":"68719476736","azure":"34359738368","aws":"17179869184","perl":"8589934592","laravel":"4294967296","vba":"2147483648","linux":"1073741824","django":"536870912","swift":"268435456","ruby":"134217728","asp.net":"67108864","node.js":"33554432","r":"16777216","ios":"8388608","mysql":"4194304","css":"2097152","jquery":"1048576","html":"524288","android":"262144","lisp":"131072","mongo":"65536","nosql":"32768","clojure":"16384","haskell":"8192","scala":"4096","rust":"2048","c#":"1024","c++":"512","c":"256","golang":"128","python":"64","php":"32","java":"16","vue":"8","reactjs":"4","angular":"2","javascript":"1"}', true);
 
 
-	if(!(count($keyIds) == 1)){
+    if(count($keyIds) > 1 && count($keyIds) < 5){
 
-		$permutedIds = array();
-		permute($keyIds, "", $permutedIds);
+        $permutedIds = array();
+        permute($keyIds, "", $permutedIds);
 
-		$keyIds = array_unique($permutedIds);
-	}
+        $keyIds = array_unique($permutedIds);
+    }
+    else if(count($keyIds) >= 5){
+        array_push($keyIds, array_sum($keyIds));
+    }
 
-	foreach($keyIds as $entry){
-	    $entrycopy = $entry;
-	    $keywords = "";
-	    foreach ($keywordNameToIds as $key => $value) {
-	        if($entrycopy - $value >= 0){
-	            $entrycopy -= $value;
-	            $keywords .= $key.'&';
-	        }
-	    }
-	    $keywords = rtrim($keywords, "&");
-	    array_push($keyNames, $keywords);
-	}
+    foreach($keyIds as $entry){
+        $entrycopy = $entry;
+        $keywords = "";
+        foreach ($keywordNameToIds as $key => $value) {
+            if($entrycopy - $value >= 0){
+                $entrycopy -= $value;
+                $keywords .= $key.'&';
+            }
+        }
+        $keywords = rtrim($keywords, "&");
+        array_push($keyNames, $keywords);
+    }
 }
 
