@@ -12,6 +12,13 @@ web frontend code.
 * JeanMarc Ruffalo-Burgat
 * Pierce Smith
 
+# Web Frontend
+- Enter the city in which you wish to work
+- Enter the (CS) skills you know (for optimal results enter 1-4)
+- The site will tell you want other languages you should learn based on what you know and what is seen in job postings in the area you wish to work.
+- An example would be, if you entered the city Fort Collins, and the skills: Java and Javascript. You would find in job postings in that area that include both of those keywords the most common keyword to also appear is Python
+- The site will also map out all the jobs in that city that include the keywords you entered, with a link and job description.
+
 ## Usage
 - mount data files using `hadoop fs -put`
 - navigate to root project directory
