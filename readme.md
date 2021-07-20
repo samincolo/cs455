@@ -89,7 +89,6 @@ following names:
 When the job is finished, you will find the output .csv files, one for each
 city in the city file, within `/home/sa/out_b_csv`.
 
-# Web Frontend
 
 ## Source code
 
