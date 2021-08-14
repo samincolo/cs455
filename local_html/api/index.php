@@ -39,15 +39,20 @@ if($requestType == "GET"){
 		}
 		$date = date("Y-m-d");
 		$coords = mysqli_fetch_assoc($db->query("SELECT lat, lng FROM cities WHERE id = $cityId"));
+
 		foreach($ids as $kword){
 			$keyArray = [];
 			//$jobIds = $db->query("SELECT jobId FROM job_keyword WHERE cityId = $cityId AND keywordId = $kword AND posted > ?");
 			$default_date = '0000-00-00';
-			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng, (((acos(sin((37.33865000000003*pi()/180)) * sin((j.`lat`*pi()/180)) + cos((37.33865000000003*pi()/180)) *cos((j.`lat`*pi()/180)) * cos(((-121.88541999999995- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE k.cityId = ? AND k.keywordId = ? AND j.posted > ? HAVING distance < ?");
-			$stmt->bind_param("iisi", $cityId, $kword, $default_date, 25);
-			$job_ids = $stmt->execute();
+			$default_distance = 25;
+			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng, (((acos(sin(($coords[lat]*pi()/180)) * sin((j.`lat`*pi()/180)) + cos(($coords[lat]*pi()/180)) *cos((j.`lat`*pi()/180)) * cos((($coords[lng]- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE  k.keywordId = ? AND j.posted > ? HAVING distance < ?");
+			$stmt->bind_param("isi", $kword, $default_date, $default_distance);
+			$stmt->execute();
+
+			$jobIds = $stmt->get_result();
+			//var_dump($jobIds);
 			while($getKey = $jobIds->fetch_assoc()){
-			    $keyArray[$getKey['jobId']] = $getKey;
+			    $keyArray[$getKey['id']] = $getKey;
 			}
 			if(count($intersection) == 0){
 				$intersection = $keyArray;
@@ -65,8 +70,8 @@ if($requestType == "GET"){
 
 		$jsonResponse = array();
 		$jobs = array();
-		foreach($intersection as $jobSearch){
-			$jobInfo = mysqli_fetch_assoc($db->query("SELECT * FROM jobs WHERE id = $jobSearch"));
+		foreach($intersection as $key=>$jobInfo){
+			//$jobInfo = mysqli_fetch_assoc($db->query("SELECT * FROM jobs WHERE id = $jobSearch"));
 			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id']);
             array_push($jobs, $job);
 		}
