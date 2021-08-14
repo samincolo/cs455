@@ -37,21 +37,27 @@ if($requestType == "GET"){
 		if($_GET['strict'] == "true"){
 			$strict = true;
 		}
+		$date = date("Y-m-d");
+		$coords = mysqli_fetch_assoc($db->query("SELECT lat, lng FROM cities WHERE id = $cityId"));
 		foreach($ids as $kword){
 			$keyArray = [];
-			$jobIds = $db->query("SELECT jobId FROM job_keyword WHERE cityId = $cityId AND keywordId = $kword");
+			//$jobIds = $db->query("SELECT jobId FROM job_keyword WHERE cityId = $cityId AND keywordId = $kword AND posted > ?");
+			$default_date = '0000-00-00';
+			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng, (((acos(sin((37.33865000000003*pi()/180)) * sin((j.`lat`*pi()/180)) + cos((37.33865000000003*pi()/180)) *cos((j.`lat`*pi()/180)) * cos(((-121.88541999999995- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE k.cityId = ? AND k.keywordId = ? AND j.posted > ? HAVING distance < ?");
+			$stmt->bind_param("iisi", $cityId, $kword, $default_date, 25);
+			$job_ids = $stmt->execute();
 			while($getKey = $jobIds->fetch_assoc()){
-				array_push($keyArray, $getKey['jobId']);
+			    $keyArray[$getKey['jobId']] = $getKey;
 			}
 			if(count($intersection) == 0){
 				$intersection = $keyArray;
 			}
 			else{
 				if($strict){
-					$intersection = array_intersect($intersection, $keyArray);
+					$intersection = array_intersect_key($intersection, $keyArray);
 				}
 				else{
-					$intersection = array_unique(array_merge($intersection, $keyArray));
+					$intersection = array_merge($intersection, $keyArray);
 				}
 			}
 		}
