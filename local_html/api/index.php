@@ -71,7 +71,7 @@ if($requestType == "GET"){
 	}
 
 	if($_GET['url'] == 'getJobDesc'){
-		$stmt = $db->prepare("SELECT description FROM jobs WHERE id = ?");
+		$stmt = $db->prepare("SELECT description FROM jobs_descriptions WHERE id = ?");
 		$stmt->bind_param("i", $_GET['id']);
 		$stmt->execute();
 		$jsonResponse = $stmt->get_result()->fetch_assoc();
