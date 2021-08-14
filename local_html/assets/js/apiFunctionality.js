@@ -35,9 +35,7 @@ function populateLeaflet(data){
     }
 
     map.flyTo([data[0]['lat'],data[0]['lng']], 12);
-
     var marker;
-
     data.forEach(element =>{
         marker = L.marker([element['lat'], element['lng']]).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a href='"+element['url']+"'>Job Link</a></h6>")
         marker.id = element['id']

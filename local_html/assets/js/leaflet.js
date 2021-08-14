@@ -5,8 +5,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(map);
 
 var markers = L.markerClusterGroup({
-    showCoverageOnHover: false,
-    zoomToBoundsOnClick: false});
+    showCoverageOnHover: false});
 
 markers.on('click', groupClick)
 $( "#jump" ).click(function() {
@@ -22,9 +21,7 @@ function groupClick(event) {
         success: function(data)
         {
             let json = JSON.parse(data);
-
             document.getElementById("description").innerHTML = json['description'];
-
         }
     });
 }
