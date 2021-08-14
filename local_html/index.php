@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="assets/css/Multi-step-form.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="assets/css/rangeslider.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.css">
 
 </head>
@@ -46,29 +47,13 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="advancedOptions" tabindex="-1" role="dialog" aria-labelledby="advancedOptions" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="advancedOptionsLabel">Advanced Options</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script src="assets/js/third-party/jquery.min.js"></script>
+    <script src="assets/js/third-party/rangeslider.min.js"></script>
+    <?php require('frames/advancedOptions.html') ?>
     
     
 
-    <script src="assets/js/third-party/jquery.min.js"></script>
+
     <script src="assets/js/third-party/typeahead.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/script.js"></script>

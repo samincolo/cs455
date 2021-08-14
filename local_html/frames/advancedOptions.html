@@ -8,8 +8,28 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+                <div class="form-group">
+                    <label for="datePosted">Date Posted</label>
+                    <select class="form-control" id="datePosted">
+                        <option>This Week</option>
+                        <option>Last 30 Days</option>
+                        <option selected>Anytime</option>
+                    </select>
+                    <br>
+                    <label for="radius">Radius</label><br>
+                    <input
+                            name='radius'
+                            type='range'
+                            min='10'
+                            max='100'
+                            step='5'
+                            value='25'
+                    >
+
+                </div>
             </div>
+
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save changes</button>
@@ -17,3 +37,14 @@
         </div>
     </div>
 </div>
+<script>
+    $('input[type="range"]').rangeslider({
+        polyfill : false,
+        onInit : function() {
+            this.output = $( '<h2 style="text-align:center"/>' ).insertAfter( this.$range ).html( this.$element.val() );
+        },
+        onSlide : function( position, value ) {
+            this.output.html( value );
+        }
+    });
+</script>
