@@ -4,7 +4,10 @@ function getJobs(){
     $( "#loading" ).toggle();
     let city = document.getElementById("citySearch").value;
     let strict = document.getElementById("strict").checked;
+    let datePosted = $('#datePosted').find(":selected").text();
     let keywords = [];
+    let radius = $('#radius').val();
+
     var x = document.getElementsByClassName("skillSearch");
     for (var i = 0; i < x.length; i++) {
         if(x[i].value.length > 0){
@@ -16,7 +19,7 @@ function getJobs(){
     $.ajax({
         type: "GET",
         url: "api/getJobs",
-        data: {"city": city, "keywords": keywords.join(), "strict" : strict},
+        data: {"city": city, "keywords": keywords.join(), "strict" : strict, "radius" : radius, "datePosted" : datePosted},
         success: function(data)
         {
             $( "#loading" ).toggle();
