@@ -56,21 +56,17 @@ if($requestType == "GET"){
 			}
 		}
 
-		$jsonResponse = "[[";
-		$jsonResponse2 = array();
+
+		$jsonResponse = array();
 		$jobs = array();
 		foreach($intersection as $jobSearch){
-		    $jsonResponse .= "{";
 			$jobInfo = mysqli_fetch_assoc($db->query("SELECT * FROM jobs WHERE id = $jobSearch"));
-			$jsonResponse .= '"title": "'.$jobInfo['jobTitle'].'","company": "'.$jobInfo['company'].'", "url": "'.$jobInfo['url'].'", "lat": "'.$jobInfo['lat'].'", "lng": "'.$jobInfo['lng'].'", "id": "'.$jobInfo['id'].'"},';
-            $job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id']);
+			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id']);
             array_push($jobs, $job);
 		}
-		$jsonResponse = rtrim($jsonResponse, ", ");
-		$jsonResponse .= "],".json_encode($jsonRes)."]";
-		array_push($jsonResponse2, $jobs, $jsonRes);
-		echo json_encode($jsonResponse2);
-		echo $jsonResponse;
+
+		array_push($jsonResponse, $jobs, $jsonRes);
+		echo json_encode($jsonResponse);
 
 
 	}
