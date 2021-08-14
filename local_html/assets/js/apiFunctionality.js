@@ -46,9 +46,13 @@ function populateLeaflet(data){
 }
 
 function populateTable(data){
+    $('#tableListing').dataTable().fnClearTable();
+    $('#tableListing').dataTable().fnDestroy();
     data.forEach(element =>{
-        let newRow = "<tr><td></td><td></td><td></td><td></td>"
-    }
+        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td>"+ element['url'] +"</td></tr>"
+        $("#tableListing tbody").append(newRow);
+    })
+    $('#tableListing').DataTable();
 }
 
 function populateSunburst(data, numSkills){
