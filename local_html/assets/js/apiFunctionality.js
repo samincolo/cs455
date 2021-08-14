@@ -33,13 +33,17 @@ function populateLeaflet(data){
         alert("No Jobs found with all of the keywords listed");
         return;
     }
+
     map.flyTo([data[0]['lat'],data[0]['lng']], 12);
 
     var marker;
+    var markers = L.markerClusterGroup();
     data.forEach(element =>{
-        marker = L.marker([element['lat'], element['lng']]).addTo(layerGroup).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a href='"+element['url']+"'>Job Link</a></h6>")
+        marker = L.marker([element['lat'], element['lng']])
         marker.id = element['id']
+        markers.addLayer(marker);
     })
+    map.addLayer(markers);
 }
 
 function populateSunburst(data, numSkills){
