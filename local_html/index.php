@@ -20,6 +20,7 @@
 <body style="background: var(--gray-dark);">
     <h1 class="text-center" style="color: var(--light);">Skill Finder</h1>
     <section>
+        <!-- Defines the progress bar at the top that is clickable to jump to different frames, can be though of as a header, its in a separate div to the body as its persistent throughout all the frames -->
         <div id="multple-step-form-n" style="margin-top: 0px;margin-bottom: 10px;padding-top: 57px;">
             <div id="progress-bar-button" class="multisteps-form">
                 <div class="row">
@@ -28,8 +29,10 @@
                     </div>
                 </div>
             </div>
+            <!-- The body, which describes each one of the frames, which I will move to their own files for code readability -->
             <div id="multistep-start-row" class="row">
                 <div id="multistep-start-column" class="col-12 col-lg-8 m-auto">
+                    <!-- Frames wrapped in a form so the data can be sent to the api for processing -->
                     <form id="main-form" class="multisteps-form__form">
                         <div id="single-form-next" class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
                             <h3 class="text-center multisteps-form__title">Enter your City</h3>
