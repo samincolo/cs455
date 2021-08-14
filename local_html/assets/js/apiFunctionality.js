@@ -49,10 +49,11 @@ function populateTable(data){
     $('#tableListing').dataTable().fnClearTable();
     $('#tableListing').dataTable().fnDestroy();
     data.forEach(element =>{
-        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td>"+ element['url'] +"</td></tr>"
+        let id = element['id']
+        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td><button className='btn btn-primary' onClick='groupClick("+id+")' type='button'>View Description</button></td><td><a class=\"text-primary\" href='"+ element['url'] +"'>Indeed Link</a></td></tr>"
         $("#tableListing tbody").append(newRow);
     })
-    $('#tableListing').DataTable();
+    $('#tableListing').DataTable({"order": [[ 2, "desc" ]]});
 }
 
 function populateSunburst(data, numSkills){

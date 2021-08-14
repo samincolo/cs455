@@ -14,10 +14,17 @@ $( "#jump" ).click(function() {
 });
 
 function groupClick(event) {
+    let id = null;
+    if(!event.layer){
+        id = event;
+    }
+    else{
+        id = event.layer.id;
+    }
     $.ajax({
         type: "GET",
         url: "api/getJobDesc",
-        data: {"id": event.layer.id},
+        data: {"id": id},
         success: function(data)
         {
             let json = JSON.parse(data);
