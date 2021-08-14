@@ -1,4 +1,4 @@
-
+local_html/config.php
 # Created by https://www.toptal.com/developers/gitignore/api/spark,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=spark,python
 
@@ -122,7 +122,7 @@ ENV/
 env.bak/
 venv.bak/
 pythonenv*
-local_html/config.php
+/local_html/config.php
 
 # Spyder project settings
 .spyderproject
