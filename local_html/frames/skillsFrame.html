@@ -6,7 +6,9 @@
     <br>
 
     <button id='addButton' class="btn btn-outline-primary text-truncate float-none float-sm-none add-another-btn" data-bss-hover-animate="pulse" type="button">Add Skill<i class="fas fa-plus-circle edit-icon"></i></button>
-
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#advancedOptions">
+        Advanced Options
+    </button>
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="strict">
         <label class="form-check-label" for="exampleCheck1">Include Only Jobs that match ALL keywords</label>
@@ -16,3 +18,4 @@
         <button class="btn btn btn-primary ml-auto js-btn-next" id='getResults' onclick="getJobs()" type="button" title="Next">Find Results</button>
     </div>
 </div>
+
