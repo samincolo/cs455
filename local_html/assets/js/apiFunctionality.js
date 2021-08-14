@@ -23,6 +23,7 @@ function getJobs(){
             let json = JSON.parse(data);
 
             populateLeaflet(json[0]);
+            populateTable(json[0]);
             populateSunburst(json[1], keywords.length);
         }
     });
@@ -42,6 +43,12 @@ function populateLeaflet(data){
         markers.addLayer(marker);
     })
     map.addLayer(markers);
+}
+
+function populateTable(data){
+    data.forEach(element =>{
+        let newRow = "<tr><td></td><td></td><td></td><td></td>"
+    }
 }
 
 function populateSunburst(data, numSkills){

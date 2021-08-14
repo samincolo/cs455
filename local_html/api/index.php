@@ -44,7 +44,7 @@ if($requestType == "GET"){
 			$keyArray = [];
 			$default_date = '0000-00-00';
 			$default_distance = 25;
-			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng, (((acos(sin(($coords[lat]*pi()/180)) * sin((j.`lat`*pi()/180)) + cos(($coords[lat]*pi()/180)) *cos((j.`lat`*pi()/180)) * cos((($coords[lng]- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE  k.keywordId = ? AND j.posted > ? HAVING distance < ?");
+			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng,j.posted, (((acos(sin(($coords[lat]*pi()/180)) * sin((j.`lat`*pi()/180)) + cos(($coords[lat]*pi()/180)) *cos((j.`lat`*pi()/180)) * cos((($coords[lng]- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE  k.keywordId = ? AND j.posted > ? HAVING distance < ?");
 			$stmt->bind_param("isi", $kword, $default_date, $default_distance);
 			$stmt->execute();
 			$jobIds = $stmt->get_result();
@@ -57,13 +57,7 @@ if($requestType == "GET"){
 			}
 			else{
 				if($strict){
-				echo "searchme";
-				    var_dump($intersection);
-				    echo "inbetrweeb";
-                    var_dump($keyArray);
 					$intersection = array_intersect_key($intersection, $keyArray);
-					echo "lastly";
-					var_dump($intersection);
 				}
 				else{
 					$intersection = array_merge($intersection, $keyArray);
@@ -75,7 +69,7 @@ if($requestType == "GET"){
 		$jsonResponse = array();
 		$jobs = array();
 		foreach($intersection as $key=>$jobInfo){
-			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id']);
+			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id'], "posted" => $jobInfo['posted']);
             array_push($jobs, $job);
 		}
 

@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="assets/css/MarkerCluster.css" />
     <link rel="stylesheet" href="assets/css/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 
 
 
@@ -65,10 +66,12 @@
             <script src="assets/js/leaflet.js"></script>
             <script src="assets/js/apiFunctionality.js"></script>
             <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-
-
-
-
+            <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script>
 
 </body>
+<script>
+$(document).ready( function () {
+    $('#tableListing').DataTable();
+} );
+</script>
 </html>
