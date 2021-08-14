@@ -34,51 +34,12 @@
                 <div id="multistep-start-column" class="col-12 col-lg-8 m-auto">
                     <!-- Frames wrapped in a form so the data can be sent to the api for processing -->
                     <form id="main-form" class="multisteps-form__form">
-                        <div id="single-form-next" class="multisteps-form__panel shadow p-4 rounded bg-white js-active" data-animation="scaleIn">
-                            <h3 class="text-center multisteps-form__title">Enter your City</h3>
-
-                            <div id="form-content" class="multisteps-form__content">
-                                <div id="input-grp-single" class="form-row mt-4">
-                                    <div class="col-12">
-                                    	<input class="form-control multisteps-form__input typeahead" id="citySearch" type="text" placeholder="City">
-                                    </div>
-                                </div>
-                                <div id="next-button" class="button-row d-flex mt-4">
-                                	<button class="btn btn btn-primary ml-auto js-btn-next" type="button" title="Next">Next</button>
-                                </div>
-                            </div>
-                        </div>
+                        <?php require('frames/cityFrame.html') ?>
                         <div id="single-form-next-prev" class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                            <h3 class="text-center multisteps-form__title">Skills</h3>
-                            <div id="form-content-1" class="multisteps-form__content">
-                                <div id="input-grp-single-1" class="form-row mt-4">
-                                    <div class="col-12"><input class="form-control multisteps-form__input skillSearch" type="text" placeholder="Skill 1"></div>
-                                </div>
-                                <br>
-
-                                <button id='addButton' class="btn btn-outline-primary text-truncate float-none float-sm-none add-another-btn" data-bss-hover-animate="pulse" type="button">Add Skill<i class="fas fa-plus-circle edit-icon"></i></button>
-                            
-                                <div class="form-check">
-								    <input type="checkbox" class="form-check-input" id="strict">
-								    <label class="form-check-label" for="exampleCheck1">Include Only Jobs that match ALL keywords</label>
-								  </div>
-                                <div id="next-prev-buttons" class="button-row d-flex mt-4">
-                                	<button class="btn btn btn-primary js-btn-prev" type="button" title="Prev">Prev</button>                            
-                                	<button class="btn btn btn-primary ml-auto js-btn-next" id='getResults' onclick="getJobs()" type="button" title="Next">Find Results</button>
-                                </div>
-                            </div>
+                            <?php require('frames/skillsFrame.html') ?>
                         </div>
                         <div id="single-form-next-prev-1" class="multisteps-form__panel shadow p-4 rounded bg-white" data-animation="scaleIn">
-                            <h3 class="text-center multisteps-form__title">Results</h3>
-                            	<img class="centered" id="loading" style="display:none" src="load.gif">
-                            	<div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
-				          		<br>
-                                <div id="mapid"></div>
-                                <div id="next-prev-buttons-1" class="button-row d-flex mt-4"><button class="btn btn btn-primary js-btn-prev" type="button" id="jump" title="Prev">Prev</button></div>
-                                <h4 class="text-center">Click Marker to view job description</h4>
-                                <div id="description">
-    							</div>
-                            </div>
+                            <?php require('frames/resultsFrame.html') ?>
                         </div>
                     </form>
                 </div>
