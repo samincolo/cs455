@@ -61,8 +61,8 @@
             <script src="assets/js/script.js"></script>
             <script src="assets/js/third-party/Multi-step-form.js"></script>
             <script src="assets/js/third-party/leaflet2.js"></script>
-            <script src="assets/js/leaflet.js"></script>
             <script src="assets/js/third-party/leaflet.markercluster.js"></script>
+            <script src="assets/js/leaflet.js"></script>
             <script src="assets/js/apiFunctionality.js"></script>
             <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 
