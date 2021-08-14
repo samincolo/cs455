@@ -4,7 +4,7 @@ function getJobs(){
     $( "#loading" ).toggle();
     let city = document.getElementById("citySearch").value;
     let strict = document.getElementById("strict").checked;
-    let datePosted = $('#datePosted').find(":selected").text();
+    let datePosted = $('#datePosted').val();
     let keywords = [];
     let radius = $('#radius').val();
 

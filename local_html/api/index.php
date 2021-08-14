@@ -37,15 +37,31 @@ if($requestType == "GET"){
 		if($_GET['strict'] == "true"){
 			$strict = true;
 		}
-		$date = date("Y-m-d");
+
+		if($_GET['datePosted'] == 'This Week'){
+            $date = DateTime::createFromFormat('Y-m-d',date("Y-m-d"));
+            $date->modify('-7 day');
+            $date = $date->format('Y-m-d');
+
+		}
+        else if($_GET['datePosted'] == 'Last 30 Days'){
+            $date = DateTime::createFromFormat('Y-m-d',date("Y-m-d"));
+            $date->modify('-30 day');
+            $date = $date->format('Y-m-d');
+        }
+		else{
+		    $date = DateTime::createFromFormat('Y-m-d','0000-00-00');
+		    $date = $date->format('Y-m-d');
+		}
+
+		$radius = $_GET['radius'];
 		$coords = mysqli_fetch_assoc($db->query("SELECT lat, lng FROM cities WHERE id = $cityId"));
 
 		foreach($ids as $kword){
 			$keyArray = [];
-			$default_date = '0000-00-00';
-			$default_distance = 25;
+
 			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng,j.posted, (((acos(sin(($coords[lat]*pi()/180)) * sin((j.`lat`*pi()/180)) + cos(($coords[lat]*pi()/180)) *cos((j.`lat`*pi()/180)) * cos((($coords[lng]- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE  k.keywordId = ? AND j.posted > ? HAVING distance < ?");
-			$stmt->bind_param("isi", $kword, $default_date, $default_distance);
+			$stmt->bind_param("isi", $kword, $date, $radius);
 			$stmt->execute();
 			$jobIds = $stmt->get_result();
 
