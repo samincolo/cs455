@@ -38,7 +38,7 @@ function populateLeaflet(data){
     map.flyTo([data[0]['lat'],data[0]['lng']], 12);
     var marker;
     data.forEach(element =>{
-        marker = L.marker([element['lat'], element['lng']]).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a href='"+element['url']+"'>Job Link</a></h6>")
+        marker = L.marker([element['lat'], element['lng']]).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a target=\"_blank\" href='"+element['url']+"'>Job Link</a></h6>")
         marker.id = element['id']
         markers.addLayer(marker);
     })
@@ -50,7 +50,7 @@ function populateTable(data){
     $('#tableListing').dataTable().fnDestroy();
     data.forEach(element =>{
         let id = element['id']
-        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td><button className='btn btn-primary' onClick='groupClick("+id+")' type='button'>View Description</button></td><td><a class=\"text-primary\" href='"+ element['url'] +"'>Indeed Link</a></td></tr>"
+        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td><button className='btn btn-primary' onClick='groupClick("+id+")' type='button'>View Description</button></td><td><a class=\"text-primary\" target=\"_blank\" href='"+ element['url'] +"'>Indeed Link</a></td></tr>"
         $("#tableListing tbody").append(newRow);
     })
     $('#tableListing').DataTable({"order": [[ 2, "desc" ]]});
