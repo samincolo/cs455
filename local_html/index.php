@@ -13,7 +13,13 @@
     <link rel="stylesheet" href="assets/css/Multi-step-form.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <link rel="stylesheet" href="assets/css/rangeslider.css" />
+    <link rel="stylesheet" href="assets/css/MarkerCluster.css" />
+    <link rel="stylesheet" href="assets/css/MarkerCluster.Default.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+
+
 
 </head>
 
@@ -46,19 +52,22 @@
             </div>
         </div>
     </section>
-    
-    
-
     <script src="assets/js/third-party/jquery.min.js"></script>
-    <script src="assets/js/third-party/typeahead.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/script.js"></script>
-    <script src="assets/js/third-party/Multi-step-form.js"></script>
-    <script src="assets/js/third-party/leaflet2.js"></script>
-    <script src="assets/js/leaflet.js"></script>
-    <script src="assets/js/apiFunctionality.js"></script>
-    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                <script src="assets/js/third-party/rangeslider.min.js"></script>
+    <?php require('frames/advancedOptions.html') ?>
+    
 
+            <script src="assets/js/third-party/typeahead.js"></script>
+            <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+            <script src="assets/js/script.js"></script>
+            <script src="assets/js/third-party/Multi-step-form.js"></script>
+            <script src="assets/js/third-party/leaflet2.js"></script>
+            <script src="assets/js/third-party/leaflet.markercluster.js"></script>
+            <script src="assets/js/leaflet.js"></script>
+            <script src="assets/js/apiFunctionality.js"></script>
+            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+            <script src='https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js'></script>
 
 </body>
+
 </html>

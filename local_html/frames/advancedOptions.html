@@ -1,0 +1,55 @@
+<div class="modal fade" id="advancedOptions" tabindex="-1" role="dialog" aria-labelledby="advancedOptions" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="advancedOptionsLabel">Advanced Options</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="datePosted">Date Posted</label>
+                    <select class="form-control" id="datePosted">
+                        <option>This Week</option>
+                        <option>Last 30 Days</option>
+                        <option selected>Anytime</option>
+                    </select>
+                    <br>
+                    <label for="radius">Radius</label><br>
+                    <input
+                            name='radius'
+                            type='range'
+                            min='10'
+                            max='100'
+                            step='5'
+                            value='25'
+                            id="radius"
+                    >
+                    <br>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="strict">
+                        <label class="form-check-label" for="strict">Include Only Jobs that match ALL keywords</label>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('input[type="range"]').rangeslider({
+        polyfill : false,
+        onInit : function() {
+            this.output = $( '<h2 style="text-align:center"/>' ).insertAfter( this.$range ).html( this.$element.val() );
+        },
+        onSlide : function( position, value ) {
+            this.output.html( value );
+        }
+    });
+
+</script>

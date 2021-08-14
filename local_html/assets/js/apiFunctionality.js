@@ -1,10 +1,13 @@
 function getJobs(){
-    layerGroup.clearLayers();
+    markers.clearLayers();
     Plotly.purge("myDiv");
     $( "#loading" ).toggle();
     let city = document.getElementById("citySearch").value;
     let strict = document.getElementById("strict").checked;
+    let datePosted = $('#datePosted').val();
     let keywords = [];
+    let radius = $('#radius').val();
+
     var x = document.getElementsByClassName("skillSearch");
     for (var i = 0; i < x.length; i++) {
         if(x[i].value.length > 0){
@@ -16,13 +19,14 @@ function getJobs(){
     $.ajax({
         type: "GET",
         url: "api/getJobs",
-        data: {"city": city, "keywords": keywords.join(), "strict" : strict},
+        data: {"city": city, "keywords": keywords.join(), "strict" : strict, "radius" : radius, "datePosted" : datePosted},
         success: function(data)
         {
             $( "#loading" ).toggle();
             let json = JSON.parse(data);
 
             populateLeaflet(json[0]);
+            populateTable(json[0]);
             populateSunburst(json[1], keywords.length);
         }
     });
@@ -33,13 +37,26 @@ function populateLeaflet(data){
         alert("No Jobs found with all of the keywords listed");
         return;
     }
-    map.flyTo([data[0]['lat'],data[0]['lng']], 12);
 
+    map.flyTo([data[0]['lat'],data[0]['lng']], 12);
     var marker;
     data.forEach(element =>{
-        marker = L.marker([element['lat'], element['lng']]).addTo(layerGroup).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a href='"+element['url']+"'>Job Link</a></h6>")
+        marker = L.marker([element['lat'], element['lng']]).bindPopup("<h4>"+element['title']+"</h4><h6>"+element['company']+"<br><a target=\"_blank\" href='"+element['url']+"'>Job Link</a></h6>")
         marker.id = element['id']
+        markers.addLayer(marker);
     })
+    map.addLayer(markers);
+}
+
+function populateTable(data){
+    $('#tableListing').dataTable().fnClearTable();
+    $('#tableListing').dataTable().fnDestroy();
+    data.forEach(element =>{
+        let id = element['id']
+        let newRow = "<tr><td>"+ element['title'] +"</td><td>"+ element['company'] +"</td><td>"+ element['posted'] +"</td><td><button className='btn btn-primary' onClick='groupClick("+id+")' type='button'>View Description</button></td><td><a class=\"text-primary\" target=\"_blank\" href='"+ element['url'] +"'>Indeed Link</a></td></tr>"
+        $("#tableListing tbody").append(newRow);
+    })
+    $('#tableListing').DataTable({"order": [[ 2, "desc" ]]});
 }
 
 function populateSunburst(data, numSkills){

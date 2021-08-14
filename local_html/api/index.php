@@ -37,21 +37,46 @@ if($requestType == "GET"){
 		if($_GET['strict'] == "true"){
 			$strict = true;
 		}
+
+		if($_GET['datePosted'] == 'This Week'){
+            $date = DateTime::createFromFormat('Y-m-d',date("Y-m-d"));
+            $date->modify('-7 day');
+            $date = $date->format('Y-m-d');
+
+		}
+        else if($_GET['datePosted'] == 'Last 30 Days'){
+            $date = DateTime::createFromFormat('Y-m-d',date("Y-m-d"));
+            $date->modify('-30 day');
+            $date = $date->format('Y-m-d');
+        }
+		else{
+		    $date = DateTime::createFromFormat('Y-m-d','0000-00-00');
+		    $date = $date->format('Y-m-d');
+		}
+
+		$radius = $_GET['radius'];
+		$coords = mysqli_fetch_assoc($db->query("SELECT lat, lng FROM cities WHERE id = $cityId"));
+
 		foreach($ids as $kword){
 			$keyArray = [];
-			$jobIds = $db->query("SELECT jobId FROM job_keyword WHERE cityId = $cityId AND keywordId = $kword");
+
+			$stmt = $db->prepare("SELECT j.`id`,j.jobTitle,j.company,j.url,j.lat,j.lng,j.posted, (((acos(sin(($coords[lat]*pi()/180)) * sin((j.`lat`*pi()/180)) + cos(($coords[lat]*pi()/180)) *cos((j.`lat`*pi()/180)) * cos((($coords[lng]- j.`lng`)*pi()/180)))) * 180/pi()) * 60 * 1.1515) as distance FROM jobs j JOIN job_keyword k ON j.id = k.jobId WHERE  k.keywordId = ? AND j.posted > ? HAVING distance < ?");
+			$stmt->bind_param("isi", $kword, $date, $radius);
+			$stmt->execute();
+			$jobIds = $stmt->get_result();
+
 			while($getKey = $jobIds->fetch_assoc()){
-				array_push($keyArray, $getKey['jobId']);
+			    $keyArray[$getKey['id']] = $getKey;
 			}
 			if(count($intersection) == 0){
 				$intersection = $keyArray;
 			}
 			else{
 				if($strict){
-					$intersection = array_intersect($intersection, $keyArray);
+					$intersection = array_intersect_key($intersection, $keyArray);
 				}
 				else{
-					$intersection = array_unique(array_merge($intersection, $keyArray));
+					$intersection = array_merge($intersection, $keyArray);
 				}
 			}
 		}
@@ -59,9 +84,8 @@ if($requestType == "GET"){
 
 		$jsonResponse = array();
 		$jobs = array();
-		foreach($intersection as $jobSearch){
-			$jobInfo = mysqli_fetch_assoc($db->query("SELECT * FROM jobs WHERE id = $jobSearch"));
-			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id']);
+		foreach($intersection as $key=>$jobInfo){
+			$job = array("title" => $jobInfo['jobTitle'], "company" => $jobInfo['company'], "url" => $jobInfo['url'], "lat" => $jobInfo['lat'], "lng" => $jobInfo['lng'], "id" => $jobInfo['id'], "posted" => $jobInfo['posted']);
             array_push($jobs, $job);
 		}
 

@@ -3,7 +3,36 @@
 <div id='myDiv'><!-- Plotly chart will be drawn inside this DIV --></div>
 <br>
 <div id="mapid"></div>
-<div id="next-prev-buttons-1" class="button-row d-flex mt-4"><button class="btn btn btn-primary js-btn-prev" type="button" id="jump" title="Prev">Prev</button></div>
+<div id="tableDiv" style="display: none">
+    <table id = "tableListing" class="table">
+        <thead>
+        <tr>
+            <th scope="col">Job Title</th>
+            <th scope="col">Company</th>
+            <th scope="col">Posted</th>
+            <th scope="col">Description</th>
+            <th scope="col">Link</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<div id="next-prev-buttons" class="button-row d-flex mt-4">
+    <button class="btn btn btn-primary js-btn-prev" type="button" id="jump" title="Prev">Prev</button>
+    <button class="btn btn btn-primary ml-auto" id="switchbutton" onclick="switchType()" type="button">Switch to Tabular Data</button>
+    <button class="btn btn btn-primary ml-auto" id="switchbutton2" style="display: none" onclick="switchType()" type="button">Switch to Map</button>
+</div>
 <h4 class="text-center">Click Marker to view job description</h4>
 <div id="description">
 </div>
+
+<script>
+    function switchType(){
+        $("#tableDiv").toggle();
+        $("#mapid").toggle();
+        $("#switchbutton").toggle();
+        $("#switchbutton2").toggle();
+    }
+</script>
